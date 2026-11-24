@@ -111,3 +111,63 @@ Runbooks must cover privileged account compromise, leaked resume, unauthorized e
 ## 12. Release checklist
 
 No production release until auth/session policy, endpoint permission matrix, cross-tenant tests, file access tests, secret/dependency scans, privacy/retention review, encrypted backup and restore test, audit verification, incident ownership and security review are complete.
+
+
+## 13. Role and permission baseline
+
+Roles are membership-scoped. A user can have different roles in different institutions or companies. The API must resolve the active membership and calculate permissions from current server-side membership and policy records.
+
+| Capability | Student | Reviewer | Placement admin | Director | Company owner | Recruiter | Platform operator |
+|---|---|---|---|---|---|---|---|
+| Read own profile and applications | Yes | No, unless assigned | Institution scope by permission | No default | No | No | No |
+| Edit own self-reported profile | Yes | No | Authorized correction only | No | No | No | No |
+| Verify academic records | No | Assigned scope if granted | Institution scope | Explicit grant | No | No | No |
+| Read student directory | No | Assigned scope | Institution scope | Aggregate by default | No | No | No |
+| Manage institution/cohorts/policies | No | No | Explicit permission | Explicit approval scope | No | No | Tenant configuration only |
+| Apply to opportunities | Own account | No | No | No | No | No | No |
+| Draft company opportunity | No | No | Institution admin if granted | No | Own company | Own company if granted | No |
+| Approve/publish opportunity | No | No | Institution scope | Explicit delegated approval | No | No | No |
+| Read applicant pipeline | Own applications | Assigned scope | Institution scope | Aggregate by default | Own company/authorized opportunity | Own company/authorized opportunity | No |
+| Transition application stage | No | Assigned permission | Institution scope | Explicit grant | No | Own opportunity and allowed stages | No |
+| Schedule interviews | Own response | Assigned scope if granted | Institution scope | No default | Own company if granted | Own company/opportunity | No |
+| Issue/revoke offers | No | No | Explicit institution permission | Explicit approval scope | Company scope if policy permits | Company scope if policy permits | No |
+| Read placement reports | Own summary | Assigned scope | Institution scope | Institution aggregate | Own company aggregate if enabled | Own opportunity summary | Platform health only |
+| Export records | No | No default | Explicit permission + audit | Aggregate-only by default | No default | No default | No student-data export by default |
+| Read audit events | Own security/session view only | No default | Explicit institution permission | Explicit permission | Own company audit subset | No default | Platform security metadata |
+| Manage platform tenants | No | No | No | No | No | No | Explicit platform permission |
+
+This matrix is a baseline, not an automatic grant. Every cell marked Yes or scope-based remains subject to explicit permission assignment, active membership and resource checks. Directors and platform operators must not receive broad student-document access merely because of their title.
+
+### 13.1 Permission naming
+
+Use stable resource.action identifiers, for example:
+- `students.read`, `students.invite`, `students.verify`, `students.update_verified`
+- `companies.read`, `companies.review`, `companies.approve`, `companies.suspend`
+- `opportunities.create`, `opportunities.submit`, `opportunities.approve`, `opportunities.publish`, `opportunities.close`
+- `applications.read`, `applications.assign`, `applications.transition`, `applications.add_internal_note`
+- `interviews.manage`, `offers.issue`, `offers.revoke`
+- `reports.read`, `exports.create`, `audit.read`, `institution.settings.manage`, `platform.tenants.manage`
+
+### 13.2 Resource and field scope
+
+- Institution resources must be queried with the active institutionId.
+- Student-owned resources must match authenticated userId.
+- Company-owned resources must match an active companyMembership.
+- Recruiter applicant access additionally requires an opportunity owned by that company and an allowed applicant visibility policy.
+- Reviewer access requires an active assignment unless the reviewer has an explicitly broader permission.
+- Response DTOs must omit fields outside the actor's visibility policy, even when the actor may read the parent resource.
+- Leadership dashboards use aggregate pipelines and small-group suppression; do not fetch all student records and hide them in the browser.
+
+### 13.3 Sensitive actions
+
+Require explicit permission, reason where appropriate, confirmation in UI, audit event and concurrency/state validation for:
+- Role/membership changes and account suspension.
+- Academic verification override.
+- Company approval or suspension.
+- Opportunity approval, publication, closure or reopening.
+- Eligibility override.
+- Application stage changes and reviewer reassignment.
+- Offer issue, revoke and compensation disclosure.
+- Bulk import commit and data export.
+- Emergency support access and retention/deletion operations.
+
