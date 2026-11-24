@@ -1,42 +1,47 @@
 # Placement Portal
 
-A secure, role-aware college placement management platform connecting students, placement-cell teams, approved employers and institutional leadership.
+A secure, institution-governed placement management platform for students, placement-cell teams, approved employers and institutional leadership.
 
 ## Product promise
-One trusted workspace for student career profiles, employer onboarding, approved jobs/internships, eligibility, applications, recruitment rounds, interviews, offers, notifications and placement reporting. It is an institution-governed platform, not an unrestricted public job board.
 
-## Core actors
-- Student: maintains a verified profile, manages private resumes, discovers opportunities, checks eligibility, applies and tracks progress.
-- Placement administrator: manages institution data, verifies students/companies, approves opportunities, configures drives, reviews applications, oversees outcomes and reports.
-- Placement reviewer: reviews only assigned students/applications and records authorized feedback.
-- Company owner: manages an approved company profile and invites company recruiters.
-- Recruiter: manages own company's approved opportunities and only the applicants assigned/visible under institution policy.
-- Placement director: sees aggregate institutional performance and performs explicitly granted approvals.
-- Platform operator: manages platform/tenant health; no default access to student content.
+One trusted workspace for student career profiles, employer onboarding, approved jobs and internships, eligibility, applications, recruitment rounds, interviews, offers, notifications and placement reporting. Placement Portal is not an unrestricted public job board and does not promise placement or selection.
 
-## Product principles
-Least privilege; institution/company isolation; auditable state transitions; private documents; transparent eligibility; accessible responsive UX; AI advisory only; modular architecture.
+## Core workspaces
 
-## Documentation
-1. docs/01-product-requirements.md
-2. docs/02-prd-feature-catalogue.md
-3. docs/03-workflows-navigation.md
-4. docs/04-scope-roadmap.md
-5. docs/05-roles-rbac.md
-6. docs/06-system-architecture.md
-7. docs/07-technology-stack.md
-8. docs/08-database-schema.md
-9. docs/09-api-specification.md
-10. docs/10-project-structure.md
-11. docs/11-ui-ux-guidelines.md
-12. docs/12-security-privacy.md
-13. docs/13-engineering-standards.md
-14. docs/14-testing-delivery.md
+- **Student:** verified profile, private resume vault, opportunities, eligibility explanations, applications, interviews, offers and notifications.
+- **Placement team:** institution structure, student verification, company approvals, opportunity review, drives, application pipeline, reviewer assignments, announcements and reports.
+- **Employer:** company verification, recruiter team, opportunity drafts, applicant pipeline and interviews within approved company scope.
+- **Leadership:** aggregate placement outcomes, cohort/program trends and company participation.
+- **Platform operations:** tenant configuration and platform health; no default access to student content.
 
-## Target stack
-React + TypeScript + Vite + Tailwind; Node.js LTS + TypeScript + Express 5; MongoDB/Mongoose; Redis + BullMQ; private S3-compatible object storage; Socket.IO for selected live updates; Zod contracts; Vitest/Supertest/Playwright.
+## Design direction
+
+**Light theme only.** White and pale neutral surfaces, navy/royal-blue primary identity, restrained teal accent and semantic status colors. The palette and tokens are defined in `docs/DESIGN_SYSTEM.md`; dark mode is not part of the required implementation.
+
+## Technology baseline
+
+React + TypeScript + Vite + Tailwind; Node.js LTS + TypeScript + Express 5; MongoDB + Mongoose; Redis + BullMQ; private S3-compatible object storage; Zod contracts; Vitest/Supertest/Playwright. Confirm dependency versions and existing source structure before implementation. Provider selections and open product policies are tracked in `docs/DECISIONS.md`.
+
+## Documentation — 15 authoritative files
+
+1. [PRODUCT_REQUIREMENTS.md](docs/PRODUCT_REQUIREMENTS.md)
+2. [PROJECT_REQUIREMENTS.md](docs/PROJECT_REQUIREMENTS.md)
+3. [MASTER_FEATURE_IMPLEMENTATION.md](docs/MASTER_FEATURE_IMPLEMENTATION.md)
+4. [IMPLEMENTATION_TRACKER.md](docs/IMPLEMENTATION_TRACKER.md)
+5. [ARCHITECTURE.md](docs/ARCHITECTURE.md)
+6. [DATABASE_SCHEMA.md](docs/DATABASE_SCHEMA.md)
+7. [API_SPECIFICATION.md](docs/API_SPECIFICATION.md)
+8. [FRONTEND_ARCHITECTURE.md](docs/FRONTEND_ARCHITECTURE.md)
+9. [DESIGN_SYSTEM.md](docs/DESIGN_SYSTEM.md)
+10. [UI_UX_GUIDELINES.md](docs/UI_UX_GUIDELINES.md)
+11. [SECURITY_GUIDELINES.md](docs/SECURITY_GUIDELINES.md)
+12. [TESTING_STRATEGY.md](docs/TESTING_STRATEGY.md)
+13. [DEVELOPMENT_GUIDE.md](docs/DEVELOPMENT_GUIDE.md)
+14. [DEPLOYMENT_GUIDE.md](docs/DEPLOYMENT_GUIDE.md)
+15. [DECISIONS.md](docs/DECISIONS.md)
 
 ## Implementation status
-These files define the target product and architecture. They do not claim that all features or source code are implemented. A feature is complete only when UI, API, persistence, authorization, audit, tests and operational behavior exist.
 
-Start with product requirements, feature catalogue, workflows and RBAC. Implement secure vertical slices. Never commit secrets, private resumes, student exports or production data.
+The documentation defines the target product and engineering baseline. It is not proof that all features, collections, APIs or screens are implemented. A feature is complete only when its UI, API, persistence, validation, authorization, audit behavior, tests and operational requirements are verified. See `docs/IMPLEMENTATION_TRACKER.md` for evidence-based progress.
+
+Start with the project/product requirements, then follow the master feature phases. Do not commit secrets, real student records, private resumes or production exports.
