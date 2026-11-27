@@ -1,15 +1,13 @@
 import express, { type Express } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
+import cookieParser from 'cookie-parser';
 import { requestId } from './middleware/requestId.js';
 import { errorHandler, notFoundHandler } from './middleware/errorHandler.js';
 import { healthRouter } from './routes/health.js';
+import { authRouter } from './routes/auth.routes.js';
 import { getEnv } from './env.js';
 
-/**
- * Builds the Express app.
- * Kept separate from server bootstrap so tests can import the app without binding a port.
- */
 export function createApp(): Express {
   const env = getEnv();
   const app = express();
@@ -22,15 +20,19 @@ export function createApp(): Express {
       credentials: true,
     }),
   );
-  app.use(express.json({ limit: '1mb' }));
+
+  // requestId FIRST — so every downstream middleware can access it,
+  // including error handlers triggered by body-parsing failures.
   app.use(requestId);
 
-  // Versioned API router
+  app.use(express.json({ limit: '1mb' }));
+  app.use(cookieParser());
+
   const api = express.Router();
   api.use('/health', healthRouter());
+  api.use('/auth', authRouter());
   app.use(env.API_PREFIX, api);
 
-  // 404 + error handler last
   app.use(notFoundHandler);
   app.use(errorHandler);
 

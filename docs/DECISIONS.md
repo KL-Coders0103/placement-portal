@@ -58,6 +58,8 @@ Review trigger:
 | BASE-018 | `#8b7cf6` (violet accent) is decorative only — never used for text | Approved | Fails WCAG AA contrast on white (2.9:1) |
 | BASE-019 | Frontend uses a single centralized API client; features never import fetch/axios directly | Approved | All API calls in one place, reused everywhere |
 | BASE-020 | All user-visible data must come from the live API; no hardcoded records, metrics, or credentials in shipped frontend code | Approved | Synthetic data limited to dev seed scripts and test fixtures |
+| BASE-021 | Every dependency logged in `DEPENDENCY_LOG.md` with justification | Approved | See DEVELOPMENT_GUIDE.md §7 |
+| BASE-022 | Auth transport: HttpOnly+Secure+SameSite=Lax refresh cookie + short-lived in-memory access token + double-submit CSRF + rotating refresh with token-family revocation | Approved | Resolves OPEN-009. Access token 15m, refresh 7d. Reuse of old refresh token revokes entire session family. |
 
 ## 4. Open decisions requiring owner approval
 
@@ -71,7 +73,7 @@ Review trigger:
 | OPEN-006 | Recruiter visibility | Exact fields visible to each company role | Employer applicant access |
 | OPEN-007 | Offer policy | Whether offer acceptance closes/affects other applications | Offer workflow |
 | OPEN-008 | Rejection feedback | Whether reason is internal, candidate-visible or both | Recruitment workflow |
-| OPEN-009 | Authentication transport | Cookie strategy, access lifetime, refresh rotation and CSRF | Auth implementation |
+| OPEN-009 | Authentication transport | **Superseded by BASE-022** | — |
 | OPEN-010 | MFA | Required for all privileged roles or selected actions | Production security gate |
 | OPEN-011 | File storage/scanning | Storage provider, file limits, scanning provider and quarantine | Resume upload |
 | OPEN-012 | Email provider | Provider, templates, sender domain and retry policy | Notifications |
