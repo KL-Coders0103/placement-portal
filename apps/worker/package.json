@@ -1,0 +1,27 @@
+{
+  "name": "@placement/worker",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "tsx watch --env-file=../../.env src/index.ts",
+    "build": "tsc -p tsconfig.json",
+    "start": "node --env-file=../../.env dist/index.js",
+    "typecheck": "tsc --noEmit",
+    "test": "echo \"(tests added in Phase 02)\" && exit 0"
+  },
+  "dependencies": {
+    "@placement/shared": "*",
+    "bullmq": "5.28.0",
+    "ioredis": "5.4.1",
+    "pino": "9.5.0",
+    "zod": "3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "22.7.5",
+    "pino-pretty": "11.2.2",
+    "tsx": "4.19.1",
+    "typescript": "5.6.3"
+  }
+}

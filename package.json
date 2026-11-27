@@ -1,0 +1,41 @@
+{
+  "name": "placement-portal",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Institution-governed placement and recruitment management platform",
+  "engines": {
+    "node": ">=20.0.0",
+    "npm": ">=10.0.0"
+  },
+  "packageManager": "npm@10.8.0",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces --if-present",
+    "dev:api": "npm run dev --workspace=@placement/api",
+    "dev:worker": "npm run dev --workspace=@placement/worker",
+    "dev:web": "npm run dev --workspace=@placement/web",
+    "lint": "eslint . --max-warnings=0",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "format": "prettier --write \"**/*.{ts,tsx,json,md,css}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,json,md,css}\"",
+    "infra:up": "docker compose -f infra/docker-compose.yml up -d",
+    "infra:down": "docker compose -f infra/docker-compose.yml down",
+    "infra:logs": "docker compose -f infra/docker-compose.yml logs -f",
+    "seed:dev": "tsx scripts/seed-dev.ts"
+  },
+  "devDependencies": {
+    "@eslint/js": "9.13.0",
+    "@types/node": "22.7.5",
+    "eslint": "9.13.0",
+    "eslint-config-prettier": "9.1.0",
+    "prettier": "3.3.3",
+    "tsx": "4.19.1",
+    "typescript": "5.6.3",
+    "typescript-eslint": "8.10.0"
+  }
+}

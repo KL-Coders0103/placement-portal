@@ -1,0 +1,55 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  quality:
+    name: Lint · Typecheck · Test · Build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Test
+        run: npm test
+
+      - name: Build
+        run: npm run build
+
+      - name: Secret scan (block accidental commits)
+        run: |
+          # Fail if any .env file other than .env.example exists in git
+          if git ls-files | grep -E '^\.env($|\.)' | grep -v '^\.env\.example$'; then
+            echo '::error::A .env file is tracked in git. Remove it and rotate any exposed secrets.'
+            exit 1
+          fi
+
+      - name: Scan web build for forbidden env names
+        run: |
+          # Fail if any built asset contains obvious secret names
+          if grep -RIn --include='*.js' -E '(MONGODB_URI|REDIS_URL|ACCESS_TOKEN_SECRET|REFRESH_TOKEN_SECRET|OBJECT_STORAGE_SECRET_KEY)' apps/web/dist 2>/dev/null; then
+            echo '::error::A forbidden secret name was found in the web bundle.'
+            exit 1
+          fi
+          echo 'Web bundle clean.'

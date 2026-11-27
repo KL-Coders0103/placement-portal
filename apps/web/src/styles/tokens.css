@@ -1,0 +1,54 @@
+/**
+ * Design tokens — mirrors DESIGN_SYSTEM.md v2.0 (violet palette).
+ * Tailwind consumes these via tailwind.config.ts.
+ * Kept in CSS variables too so non-Tailwind contexts (charts, PDFs) can read them.
+ */
+:root {
+  /* Surfaces */
+  --color-page: #f5f7ff;
+  --color-surface: #ffffff;
+  --color-surface-subtle: #f9faff;
+  --color-surface-strong: #eceaff;
+  --color-border: #e6e4f5;
+  --color-border-strong: #c7c1ff;
+
+  /* Brand */
+  --color-brand-primary: #5046e5;
+  --color-brand-primary-hover: #4338ca;
+  --color-brand-primary-soft: #eeeaff;
+  --color-brand-ink: #1e1b4b;
+  --color-brand-ink-hover: #14122f;
+  --color-accent-violet: #8b7cf6;
+  --color-accent-violet-soft: #ede9ff;
+
+  /* Text */
+  --color-text-primary: #0b0f1a;
+  --color-text-secondary: #4a486a;
+  --color-text-muted: #6b6a8a;
+  --color-text-inverse: #f5f7ff;
+
+  /* Focus */
+  --color-focus-ring: #5046e5;
+  --color-focus-halo: #c7c1ff;
+
+  /* Semantic */
+  --color-success: #0f7a52;
+  --color-success-bg: #e6f7ef;
+  --color-success-border: #9dd9bf;
+
+  --color-warning: #a15c00;
+  --color-warning-bg: #fdf3e3;
+  --color-warning-border: #f3d39a;
+
+  --color-danger: #b4232f;
+  --color-danger-bg: #fdecee;
+  --color-danger-border: #f2b8bf;
+
+  --color-info: #1f5fb3;
+  --color-info-bg: #e8f1fd;
+  --color-info-border: #a9c8ef;
+
+  --color-neutral: #4a486a;
+  --color-neutral-bg: #f0eefc;
+  --color-neutral-border: #e6e4f5;
+}

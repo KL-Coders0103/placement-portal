@@ -1,47 +1,106 @@
 # Placement Portal
 
-A secure, institution-governed placement management platform for students, placement-cell teams, approved employers and institutional leadership.
+Institution-governed placement and recruitment management platform.
 
-## Product promise
+> Not an unrestricted public job board. Does not guarantee placement.
 
-One trusted workspace for student career profiles, employer onboarding, approved jobs and internships, eligibility, applications, recruitment rounds, interviews, offers, notifications and placement reporting. Placement Portal is not an unrestricted public job board and does not promise placement or selection.
+## Stack
 
-## Core workspaces
+- **Web:** React 18 + TypeScript + Vite + Tailwind (light theme only)
+- **API:** Node.js LTS + TypeScript + Express 5 — `/api/v1`
+- **Worker:** BullMQ consumer for email, scans, exports and reminders
+- **Data:** MongoDB (Mongoose) + Redis + private S3-compatible storage
+- **Validation:** Zod at every trust boundary
+- **Tests:** Vitest + Supertest + Playwright
 
-- **Student:** verified profile, private resume vault, opportunities, eligibility explanations, applications, interviews, offers and notifications.
-- **Placement team:** institution structure, student verification, company approvals, opportunity review, drives, application pipeline, reviewer assignments, announcements and reports.
-- **Employer:** company verification, recruiter team, opportunity drafts, applicant pipeline and interviews within approved company scope.
-- **Leadership:** aggregate placement outcomes, cohort/program trends and company participation.
-- **Platform operations:** tenant configuration and platform health; no default access to student content.
+## Repo layout
 
-## Design direction
+```
+apps/
+  web/      React SPA
+  api/      Express API
+  worker/   Background worker
+packages/
+  shared/   DTOs, enums, Zod env schemas, error codes, HTTP envelope
+  config/   Shared TS/ESLint/Prettier config
+docs/       Authoritative specification set (15 docs + UI spec + dep log)
+infra/      Docker Compose for local Mongo (replica set), Redis, MinIO
+scripts/    Seed, migration, maintenance
+```
 
-**Light theme only.** White and pale neutral surfaces, navy/royal-blue primary identity, restrained teal accent and semantic status colors. The palette and tokens are defined in `docs/DESIGN_SYSTEM.md`; dark mode is not part of the required implementation.
+## Prerequisites
 
-## Technology baseline
+- Node.js **LTS** (see `.nvmrc`)
+- npm **10+**
+- Docker Desktop (for MongoDB replica set, Redis, MinIO locally)
+- Git
 
-React + TypeScript + Vite + Tailwind; Node.js LTS + TypeScript + Express 5; MongoDB + Mongoose; Redis + BullMQ; private S3-compatible object storage; Zod contracts; Vitest/Supertest/Playwright. Confirm dependency versions and existing source structure before implementation. Provider selections and open product policies are tracked in `docs/DECISIONS.md`.
+## First-time setup
 
-## Documentation — 15 authoritative files
+```bash
+# 1. Install dependencies (uses package-lock.json)
+npm ci
 
-1. [PRODUCT_REQUIREMENTS.md](docs/PRODUCT_REQUIREMENTS.md)
-2. [PROJECT_REQUIREMENTS.md](docs/PROJECT_REQUIREMENTS.md)
-3. [MASTER_FEATURE_IMPLEMENTATION.md](docs/MASTER_FEATURE_IMPLEMENTATION.md)
-4. [IMPLEMENTATION_TRACKER.md](docs/IMPLEMENTATION_TRACKER.md)
-5. [ARCHITECTURE.md](docs/ARCHITECTURE.md)
-6. [DATABASE_SCHEMA.md](docs/DATABASE_SCHEMA.md)
-7. [API_SPECIFICATION.md](docs/API_SPECIFICATION.md)
-8. [FRONTEND_ARCHITECTURE.md](docs/FRONTEND_ARCHITECTURE.md)
-9. [DESIGN_SYSTEM.md](docs/DESIGN_SYSTEM.md)
-10. [UI_UX_GUIDELINES.md](docs/UI_UX_GUIDELINES.md)
-11. [SECURITY_GUIDELINES.md](docs/SECURITY_GUIDELINES.md)
-12. [TESTING_STRATEGY.md](docs/TESTING_STRATEGY.md)
-13. [DEVELOPMENT_GUIDE.md](docs/DEVELOPMENT_GUIDE.md)
-14. [DEPLOYMENT_GUIDE.md](docs/DEPLOYMENT_GUIDE.md)
-15. [DECISIONS.md](docs/DECISIONS.md)
+# 2. Start local infrastructure
+npm run infra:up
 
-## Implementation status
+# 3. Copy env and fill local values
+cp .env.example .env
 
-The documentation defines the target product and engineering baseline. It is not proof that all features, collections, APIs or screens are implemented. A feature is complete only when its UI, API, persistence, validation, authorization, audit behavior, tests and operational requirements are verified. See `docs/IMPLEMENTATION_TRACKER.md` for evidence-based progress.
+# 4. Seed synthetic dev data
+npm run seed:dev
 
-Start with the project/product requirements, then follow the master feature phases. Do not commit secrets, real student records, private resumes or production exports.
+# 5. Run everything (web + api + worker)
+npm run dev
+```
+
+- Web:  http://localhost:5173
+- API:  http://localhost:3000/api/v1
+- Health: http://localhost:3000/api/v1/health/live
+- API docs: http://localhost:3000/api/docs (added in Phase 02)
+
+## Quality gates (run before committing)
+
+```bash
+npm run lint
+npm run typecheck
+npm test
+npm run build
+```
+
+## Documentation
+
+Read in this order (see `docs/`):
+
+1. `PROJECT_REQUIREMENTS.md`
+2. `PRODUCT_REQUIREMENTS.md`
+3. `MASTER_FEATURE_IMPLEMENTATION.md`
+4. `ARCHITECTURE.md`
+5. `DATABASE_SCHEMA.md`
+6. `API_SPECIFICATION.md`
+7. `SECURITY_GUIDELINES.md`
+8. `DESIGN_SYSTEM.md` + `UI_UX_GUIDELINES.md` + `UI_RESPONSIVE_SPEC.md`
+9. `FRONTEND_ARCHITECTURE.md`
+10. `TESTING_STRATEGY.md`
+11. `IMPLEMENTATION_TRACKER.md`
+12. `DECISIONS.md`
+13. `DEPLOYMENT_GUIDE.md`
+
+## Rules (non-negotiable)
+
+- **No secrets in code, tests, fixtures or git history.**
+- **No hardcoded data presented as live.** All user-visible values come from the API.
+- **One API client** on the frontend (`apps/web/src/lib/api/client.ts`). No `fetch`/`axios` in features.
+- **Design tokens only** — no one-off hex colors.
+- **Every page implements** loading / empty / error / forbidden / success states.
+- **Server is the authorization authority.** Frontend guards are UX only.
+- **Implemented ≠ Complete.** A feature is complete only after acceptance + authz + tests + a11y + tracker evidence.
+
+## Synthetic dev data
+
+`scripts/seed-dev.ts` creates clearly-labelled test institutions, students, companies
+and recruiters. It never runs against a real database. It is not imported by production code.
+
+## License
+
+Internal — not for redistribution.

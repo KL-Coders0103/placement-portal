@@ -1,0 +1,45 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+build/
+coverage/
+*.tsbuildinfo
+
+# Env
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Runtime
+.DS_Store
+Thumbs.db
+*.pid
+
+# Editor
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.swp
+
+# Test
+coverage/
+playwright-report/
+test-results/
+
+# Infra
+infra/data/
+infra/volumes/
+
+# Uploads and private data (never commit)
+uploads/
+*.pdf
+*.docx
+!.gitkeep
