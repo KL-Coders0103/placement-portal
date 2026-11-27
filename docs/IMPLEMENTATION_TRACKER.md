@@ -46,12 +46,12 @@ Reviewer/approval:
 | Metric | Initial value |
 |---|---:|
 | Phases | 14 |
-| Complete | 0 |
+| Complete | 1 |
 | In Progress | 0 |
 | Blocked | 0 |
 | Implemented / Testing / Failed | 0 |
-| Not Started | 14 |
-| Deferred | 0 |
+| Not Started | 13 |
+| Deferred | 1 |
 
 **Overall status:** Documentation baseline prepared. Source implementation status must be verified from repository code; do not infer progress from documentation or commits.
 
@@ -60,13 +60,13 @@ Reviewer/approval:
 ### Phase 01 — Repository Foundation and Runtime
 | ID | Feature group | Status | Evidence / notes |
 |---|---|---|---|
-| P01-01 | Repository/workspace structure and package manager | Not Started | |
-| P01-02 | TypeScript, lint, formatting and aliases | Not Started | |
-| P01-03 | Web application bootstrap and routing | Not Started | |
-| P01-04 | Express API bootstrap, errors and request IDs | Not Started | |
-| P01-05 | MongoDB/Mongoose connection and health checks | Not Started | |
-| P01-06 | Redis/BullMQ and worker bootstrap | Not Started | |
-| P01-07 | Environment validation and CI | Not Started | |
+| P01-01 | Repository/workspace structure and package manager | Complete | npm workspaces, root package.json, single lockfile |
+| P01-02 | TypeScript, lint, formatting and aliases | Complete | tsconfig.base.json + eslint.config.js + prettier.config.js |
+| P01-03 | Web application bootstrap and routing | Complete | Vite + React + Tailwind, tokens.css mirrors DESIGN_SYSTEM v2.0 |
+| P01-04 | Express API bootstrap, errors and request IDs | Complete | Express 5, /api/v1, requestId + errorHandler middleware |
+| P01-05 | MongoDB/Mongoose connection and health checks | Complete | Replica set via docker-compose; health/live + health/ready |
+| P01-06 | Redis/BullMQ and worker bootstrap | Complete | Worker connects to Redis, placeholder queue, graceful shutdown |
+| P01-07 | Environment validation and CI | Complete | Zod env schemas; CI runs lint/typecheck/test/build/secret-scan |
 
 ### Phase 02 — Identity, Authentication and Membership
 | ID | Feature group | Status | Evidence / notes |
@@ -213,6 +213,7 @@ Record each blocker with decision ID, affected phase, owner, next action and dat
 | Date | Phase / feature | Work performed | Tests and observed result | Commit/PR |
 |---|---|---|---|---|
 | — | Documentation baseline | 15-document specification set prepared | Application implementation not verified by this document update | — |
+| 2025-11-28 | Phase 01 | Repo scaffold complete; infra (Mongo replset + Redis + MinIO) running | lint, typecheck, build pass; /health/live + /health/ready return 200; worker listening | (commit hash) |
 
 ## 8. Completion rule
 
