@@ -48,11 +48,16 @@ Review trigger:
 | BASE-008 | API version prefix `/api/v1` | Proposed | Contract baseline |
 | BASE-009 | Modular monolith plus separate worker before microservices | Approved baseline | Keep domain boundaries explicit |
 | BASE-010 | Light theme is the only required theme | Approved | No dark-mode implementation requirement |
-| BASE-011 | Navy/royal-blue and neutral light palette | Approved direction | Exact tokens in DESIGN_SYSTEM.md |
+| BASE-011 | Violet/purple and neutral light palette | Approved | Exact tokens in DESIGN_SYSTEM.md |
 | BASE-012 | Server-side authorization is authoritative | Approved | RBAC plus tenant/resource/field checks |
 | BASE-013 | AI, if introduced, is advisory only | Approved | No automated hiring decisions |
 | BASE-014 | Student files are private by default | Approved | Authorized download only |
 | BASE-015 | All consequential workflow transitions are auditable | Approved | Append-only event history |
+| BASE-016 | Package manager is npm workspaces | Approved | Single committed package-lock.json at repo root |
+| BASE-017 | Design identity uses violet/purple seed colors `#f5f7ff #c7c1ff #8b7cf6 #5046e5 #1e1b4b #0b0f1a` | Approved | Semantic colors hue-shifted cooler for violet harmony |
+| BASE-018 | `#8b7cf6` (violet accent) is decorative only — never used for text | Approved | Fails WCAG AA contrast on white (2.9:1) |
+| BASE-019 | Frontend uses a single centralized API client; features never import fetch/axios directly | Approved | All API calls in one place, reused everywhere |
+| BASE-020 | All user-visible data must come from the live API; no hardcoded records, metrics, or credentials in shipped frontend code | Approved | Synthetic data limited to dev seed scripts and test fixtures |
 
 ## 4. Open decisions requiring owner approval
 

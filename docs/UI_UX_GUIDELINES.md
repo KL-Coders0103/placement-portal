@@ -34,7 +34,7 @@ Show aggregate outcomes and trends with metric definitions, date windows and coh
 
 ## 3. Brand direction
 
-Use the light palette from DESIGN_SYSTEM.md: white and pale neutral surfaces, navy structure, royal-blue primary actions, restrained teal accent and semantic success/warning/danger. Avoid dark theme, neon colors, excessive gradients, glass effects and oversized decorative hero sections in operational screens.
+Use the light palette from DESIGN_SYSTEM.md: white and pale lavender surfaces, deep violet ink for structure and headings, royal-violet primary actions, restrained violet accent for decoration only, and semantic success/warning/danger/info colors hue-shifted to harmonize with the violet brand. Avoid dark theme, neon colors, excessive gradients, glass effects and oversized decorative hero sections in operational screens.
 
 ## 4. Shared application shell
 

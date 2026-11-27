@@ -58,7 +58,23 @@ Separate database, Redis, storage and secrets. TLS, restricted admin access, mon
 
 ## 4. Configuration
 
-Use validated environment variables. Proposed API variables:
+### 4.1 Rules
+
+- **No secrets in source code, git history, tests, fixtures or documentation.**
+- **No hardcoded fallbacks** for secrets or connection strings. If a required env value is missing, the process must fail fast at startup with a clear error.
+- **Env validation is done once**, at startup, via Zod schemas in `packages/shared/src/env/`.
+  - `apps/api` and `apps/worker` read **unprefixed** variables (`MONGODB_URI`, `REDIS_URL`, etc.).
+  - `apps/web` reads **only** variables prefixed with `VITE_*`.
+- **Any secret accidentally prefixed with `VITE_*` is a bug.** CI must scan the web bundle and fail if it finds `SECRET`, `KEY`, `TOKEN`, `PASSWORD`, `MONGODB_URI`, `REDIS_URL` or similar names in output.
+- **Three env files** across the project:
+  - `.env.example` — committed, placeholders only, documents every variable with a comment.
+  - `.env` — local only, gitignored, never shared or committed.
+  - Staging/production — injected by the platform secret manager at runtime. Never stored in files.
+- **Credentials live only in the secret manager** for staging and production. Rotate on a documented schedule and immediately after any suspected compromise.
+
+### 4.2 Proposed API variables
+
+Names below are examples; finalize exact names in the env schema.
 
 ```env
 NODE_ENV=development
@@ -80,7 +96,19 @@ EMAIL_FROM=
 LOG_LEVEL=debug
 ```
 
-Names are examples; finalize exact names in env schema. Never commit populated .env files. Only explicitly public `VITE_*` variables may enter the web bundle. Validate required values at startup and fail fast.
+### 4.3 Proposed web variables
+
+Only `VITE_*` variables may appear in the browser bundle:
+
+```env
+VITE_API_BASE_URL=http://localhost:3000/api/v1
+VITE_APP_ENV=development
+```
+
+### 4.4 Startup validation
+
+- `apps/api` and `apps/worker` parse `process.env` with a Zod schema before binding to any port. Invalid or missing values → exit non-zero with a clear message (no secrets in the error text).
+- `apps/web` parses `import.meta.env` with a Zod schema before mounting React. Invalid values → render a static error screen (no stack traces, no env dump).
 
 ## 5. Build and release process
 

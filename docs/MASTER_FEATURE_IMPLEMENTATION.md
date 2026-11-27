@@ -25,31 +25,36 @@
 
 ### 1.1 Repository and workspace
 - Inspect existing repository tree, branches, scripts and dependencies.
-- Confirm pnpm workspace or approve a different package manager; commit one lockfile.
-- Establish `apps/web`, `apps/api`, `apps/worker`, shared packages and docs.
+- Use **npm workspaces** as the package manager (per DECISIONS.md BASE-016); commit one `package-lock.json` at repo root.
+- Establish `apps/web`, `apps/api`, `apps/worker`, `packages/shared`, `packages/config` and `docs/`.
 - Configure TypeScript strict mode, path aliases, lint, formatting and editor settings.
-- Add environment examples, .gitignore, README and contribution workflow.
+- Add environment examples, `.gitignore`, README and contribution workflow.
 - Configure CI for install, lint, typecheck, tests and build.
 
 ### 1.2 Web foundation
 - React + TypeScript + Vite + Tailwind.
 - Router, query client, form provider, error boundary and toast system.
-- Light-only design tokens and responsive shell.
+- Light-only design tokens wired into Tailwind config and CSS variables.
 - Public, authentication and protected route groups.
+- Single API client scaffold at `apps/web/src/lib/api/client.ts` (no feature may call `fetch` directly).
+- Zod-validated env schema at `apps/web/src/lib/env/env.ts`; app fails at boot if `VITE_*` variables are invalid or missing.
 
 ### 1.3 API foundation
 - Express 5 + TypeScript bootstrap.
 - Versioned `/api/v1` routing, centralized errors, request IDs and structured logs.
 - Input validation, security headers, restrictive CORS and rate-limit middleware.
 - OpenAPI/Swagger and liveness/readiness endpoints.
+- Zod-validated env schema at `packages/shared/src/env/api.ts`; API fails startup if any required variable is missing or invalid.
+- **No hardcoded credentials, connection strings, tokens or secrets anywhere in code.** All configuration comes from environment variables.
 
 ### 1.4 Infrastructure foundation
-- MongoDB connection and Mongoose conventions.
+- MongoDB connection and Mongoose conventions (single-node replica set locally via `infra/docker-compose.yml`).
 - Redis connection and BullMQ setup.
 - Worker bootstrap and graceful shutdown.
 - Local synthetic seed scripts and health checks.
+- Docker Compose file providing MongoDB (replica set), Redis and MinIO for local development.
 
-**Exit criteria:** Web, API and worker run independently; env validation works; health checks work; CI quality baseline passes.
+**Exit criteria:** Web, API and worker run independently; env validation works; health checks work; CI quality baseline passes; no secrets or hardcoded data exist in the repo.
 
 ## PHASE 02 — Identity, Authentication and Membership
 

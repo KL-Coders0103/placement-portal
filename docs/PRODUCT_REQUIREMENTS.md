@@ -1,6 +1,6 @@
 # Placement Portal — Product Requirements Document
 
-**Version:** 1.0  
+**Version:** 1.1  
 **Status:** Proposed product baseline; institution policies and provider decisions remain configurable/open where noted  
 **Product:** Institution-governed placement and recruitment management platform  
 **Primary audience:** Students, placement-cell teams, approved employers, institutional leadership
@@ -115,6 +115,27 @@ Every policy change must have an effective date, actor, reason and audit record.
 - Reliability: idempotent jobs, durable state transitions, backups, restore drills and monitoring.
 - Scalability: stateless API instances, horizontally scalable workers and managed database/cache/storage.
 - Maintainability: strict TypeScript, modular boundaries, automated tests and versioned contracts.
+
+### 7.1 Dynamic-data rule (product-level)
+
+Every user-visible value in the delivered product must come from the live API at request time. This is a product promise, not only an engineering constraint.
+
+The following are explicitly forbidden in delivered code paths:
+
+- Hardcoded student, opportunity, application, company, or user records presented as live data.
+- Static metric numbers (e.g., a dashboard stat card with a literal value).
+- Fabricated company logos, testimonials, profile pictures, or help-center content presented as if produced by real users.
+- Client-side filtering used as a substitute for server-side authorization.
+- "Fake delay" timeouts to simulate loading in shipped code.
+- Status, role, or type strings duplicated across files instead of shared enums.
+
+Allowed exceptions:
+
+- `__DEV__` only: synthetic seed data loaded via `scripts/seed:dev`, clearly labelled with a development banner.
+- Test and Storybook fixtures (never imported by production code).
+- Static marketing, help, and legal copy on public pages.
+
+Verification: a CI lint rule flags literal values bound to data slots in production components unless the value comes from a variable, hook, or shared constant.
 
 ## 8. Success metrics
 
